@@ -1,5 +1,5 @@
 import {validateBackup,mergeEntries} from './backup.js';
-const VERSION='1.0.0';
+const VERSION='1.0.1';
 const $=id=>document.getElementById(id);
 let db,pendingRestore,registration,updating=false;
 $('version').textContent=VERSION;
