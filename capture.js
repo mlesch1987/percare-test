@@ -504,5 +504,5 @@ function fb(t,btn){
 pcRoot.addEventListener('input',function(e){var id=e.target.id; if(/^k(dvon|dbis|tvon|tbis)-/.test(id)){var n=id.split('-')[1];calcMidById('kdvon-'+n,'ktvon-'+n,'kdbis-'+n,'ktbis-'+n,'kmid-'+n);}if(/^erb-(dvon|dbis|tvon|tbis)$/.test(id))calcMidById('erb-dvon','erb-tvon','erb-dbis','erb-tbis','erb-mid');});
 
 pcRoot.addEventListener('input',()=>document.dispatchEvent(new Event('percare:dirty')));
-pcRoot.addEventListener('click',e=>{if(!e.target.closest('#submit-btn,#copybtn'))document.dispatchEvent(new Event('percare:dirty'));});
+pcRoot.addEventListener('click',e=>{const button=e.target.closest('button');if(button&&!button.matches('#submit-btn,#copybtn'))document.dispatchEvent(new Event('percare:dirty'));});
 })();

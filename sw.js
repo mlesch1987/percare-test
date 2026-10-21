@@ -1,5 +1,5 @@
 // Version bei jeder Veröffentlichung gemeinsam mit app.js erhöhen.
-const VERSION='1.1.0';
+const VERSION='1.1.1';
 const CACHE='percare-test-shell-'+VERSION;
 const ASSETS=['./','./index.html','./style.css','./app.js','./backup.js','./capture.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
