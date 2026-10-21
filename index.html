@@ -1,10 +1,199 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#245744"><meta name="apple-mobile-web-app-capable" content="yes"><title>PerCare · Techniktest</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script></head>
-<body><main><header><span class="mark">P</span><div><h1>PerCare</h1><p>Techniktest · <span id="version">1.0.1</span></p></div></header>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#245744"><meta name="apple-mobile-web-app-capable" content="yes"><title>PerCare · Erfassungstest</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script><script src="capture.js" defer></script></head>
+<body><main><header><span class="mark">P</span><div><h1>PerCare</h1><p>Erfassungstest · <span id="version">1.1.0</span></p></div></header>
 <aside><strong>Nur für Testeinträge</strong><p>Noch keine Gesundheitsakte. Keine echten Beobachtungen, Befunde oder CSV-Dateien eingeben.</p></aside>
-<section><h2>1 · Speicherung testen</h2><form id="entry-form"><label for="note">Testnotiz</label><textarea id="note" maxlength="1000" required placeholder="Zum Beispiel: Test A – nach Neustart prüfen"></textarea><button type="submit" id="save" disabled>Testeintrag speichern</button></form><p id="storage">Speicher wird geöffnet …</p><p id="status" role="status" aria-live="polite"></p><ul id="entries"></ul></section>
-<section><h2>2 · Sicherung</h2><p>Die Sicherung enthält alle Testeinträge. Speichere sie in „Dateien“ und übertrage eine Kopie auf den Mac.</p><button id="backup" disabled>Sicherungsdatei erstellen</button><p id="backup-status">Noch keine Sicherung in dieser Installation erstellt.</p><label for="restore">Sicherung zur Prüfung auswählen</label><input id="restore" type="file" accept="application/json,.json" disabled><p id="restore-info" role="status"></p><button id="confirm-restore" hidden>Geprüfte Einträge zusammenführen</button><small>Vorhandene Einträge werden nicht gelöscht. Gleiche IDs mit anderem Inhalt blockieren die Übernahme.</small></section>
-<section><h2>3 · Update prüfen</h2><p id="update-status">Eine neue Programmversion darf die gespeicherten Einträge nicht verändern.</p><button id="check-update">Nach Update suchen</button><button id="apply-update" hidden>Update jetzt laden</button><small>Vor dem Update Sicherungsdatei erstellen und Testnotiz speichern. Ungespeicherter Text wird beim Neuladen verworfen.</small></section>
+<section><h2>1 · Vollständige Erfassung testen</h2><div id="percare-mock"><div id="pc-reference"><style>#percare-mock #pc-reference * { box-sizing: border-box; margin: 0; padding: 0; }#percare-mock #pc-reference  { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--pc-bg); color: var(--pc-ink); }#percare-mock #pc-reference .hdr { background: var(--pc-panel); padding: 14px 18px; border-bottom: 1px solid var(--pc-line); display: flex; align-items: center; gap: 10px; }#percare-mock #pc-reference .hdr-name { font-size: 18px; font-weight: 700; }#percare-mock #pc-reference .hdr-sub { font-size: 13px; color: var(--pc-ink); }#percare-mock #pc-reference .wrap { padding: 12px 14px 60px; max-width: 480px; margin: 0 auto; }#percare-mock #pc-reference .ref-card { background: var(--pc-panel); border-radius: 13px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 4px transparent; }#percare-mock #pc-reference .ctop { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; }#percare-mock #pc-reference .ctitle { font-size: 12px; font-weight: 700; color: var(--pc-ink); text-transform: uppercase; letter-spacing: .06em; }#percare-mock #pc-reference .tbtn { font-size: 13px; padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--pc-line); background: var(--pc-bg); color: var(--pc-ink);  font-weight: 500; }#percare-mock #pc-reference .tbtn.on { background: var(--pc-bg); color: var(--pc-accent); border-color: var(--pc-accent); }#percare-mock #pc-reference .c { padding: 0 16px 16px; border-top: 1px solid var(--pc-line); padding-top: 13px; }#percare-mock #pc-reference .field { margin-bottom: 13px; }#percare-mock #pc-reference .field:last-child { margin-bottom: 0; }#percare-mock #pc-reference .field label { display: block; font-size: 13px; color: var(--pc-ink); font-weight: 500; margin-bottom: 5px; }#percare-mock #pc-reference input[type=date], #percare-mock #pc-reference input[type=time], #percare-mock #pc-reference input[type=number], #percare-mock #pc-reference input[type=text], #percare-mock #pc-reference select, #percare-mock #pc-reference textarea {
+  width: 100%; font-size: 16px; padding: 10px 12px; border-radius: 9px;
+  border: 1.5px solid var(--pc-line); background: var(--pc-panel); color: var(--pc-ink);
+  font-family: inherit; -webkit-appearance: none; }#percare-mock #pc-reference textarea { resize: vertical; min-height: 60px; }#percare-mock #pc-reference select { background-image: none; background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }#percare-mock #pc-reference .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }#percare-mock #pc-reference .chips { display: flex; flex-wrap: wrap; gap: 8px; }#percare-mock #pc-reference .chip { font-size: 14px; padding: 9px 14px; border-radius: 22px; border: 1.5px solid var(--pc-line); background: var(--pc-panel); color: var(--pc-ink);  min-height: 42px; display: flex; align-items: center; }#percare-mock #pc-reference .chip.sel { background: var(--pc-bg); color: var(--pc-accent); border-color: var(--pc-accent); font-weight: 600; }#percare-mock #pc-reference .chip.wrn { background: var(--pc-bg); color: var(--pc-ink); border-color: var(--pc-ink); font-weight: 600; }#percare-mock #pc-reference .schwer { display: none; font-size: 11px; background: var(--pc-bg); color: var(--pc-ink); padding: 2px 8px; border-radius: 8px; margin-left: 6px; }#percare-mock #pc-reference .tsbox { background: var(--pc-bg); border-radius: 9px; padding: 11px; margin-top: 8px; }#percare-mock #pc-reference .tslbl { font-size: 11px; font-weight: 700; color: var(--pc-ink); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }#percare-mock #pc-reference .midhint { font-size: 12px; color: var(--pc-accent); margin-top: 5px; font-style: italic; }#percare-mock #pc-reference .tshint { font-size: 12px; color: var(--pc-ink); margin-top: 4px; font-style: italic; }#percare-mock #pc-reference .entrybox { background: var(--pc-bg); border-radius: 9px; padding: 12px; margin-bottom: 8px; }#percare-mock #pc-reference .entrytitle { font-size: 13px; font-weight: 700; color: var(--pc-ink); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }#percare-mock #pc-reference .delbtn { padding: 4px 10px; background: none; border: 1.5px solid var(--pc-line); border-radius: 14px; color: var(--pc-ink); font-size: 12px;  }#percare-mock #pc-reference .addbtn { width: 100%; padding: 11px; background: none; border: 1.5px dashed var(--pc-line); border-radius: 9px; color: var(--pc-ink); font-size: 14px;  margin-top: 4px; }#percare-mock #pc-reference .dosebox { background: var(--pc-bg); border-radius: 9px; padding: 11px; margin-bottom: 8px; }#percare-mock #pc-reference .dosetitle { font-size: 13px; font-weight: 700; color: var(--pc-ink); margin-bottom: 9px; display: flex; align-items: center; justify-content: space-between; }#percare-mock #pc-reference .mrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }#percare-mock #pc-reference .mbtn { padding: 10px; border-radius: 9px; border: 1.5px solid var(--pc-line); background: var(--pc-panel); font-size: 14px; font-weight: 500; color: var(--pc-ink);  text-align: center; }#percare-mock #pc-reference .mbtn.d { background: var(--pc-bg); color: var(--pc-accent); border-color: var(--pc-accent); }#percare-mock #pc-reference .mbtn.f { background: var(--pc-bg); color: var(--pc-ink); border-color: var(--pc-ink); }#percare-mock #pc-reference .laxinfo { font-size: 12px; color: var(--pc-ink); text-align: center; margin-top: 5px; }#percare-mock #pc-reference .submitbtn { width: 100%; padding: 16px; background: var(--pc-accent); color: var(--pc-panel); border: none; border-radius: 13px; font-size: 17px; font-weight: 700;  margin-top: 6px; }#percare-mock #pc-reference .outbox { background: var(--pc-ink); color: var(--pc-accent); border-radius: 12px; padding: 15px; font-size: 13px; font-family: monospace; white-space: pre-wrap; line-height: 1.5; margin-top: 12px; display: none; }#percare-mock #pc-reference .copybtn { width: 100%; padding: 15px; background: var(--pc-accent); color: var(--pc-panel); border: none; border-radius: 13px; font-size: 16px; font-weight: 700;  margin-top: 10px; display: none; }#percare-mock #pc-reference .copyhint { font-size: 13px; color: var(--pc-ink); text-align: center; margin-top: 5px; display: none; }#percare-mock #pc-reference .nonehint { font-size: 13px; color: var(--pc-ink); margin-bottom: 8px; }
+
+#percare-mock #pc-reference .ref-card{padding:0} #percare-mock #pc-reference .grid2{grid-template-columns:repeat(2,minmax(0,1fr))} #percare-mock #pc-reference input{min-width:0} #percare-mock #pc-reference .outbox{overflow-wrap:anywhere;color:var(--pc-ink)} #percare-mock #pc-reference .submitbtn,#percare-mock #pc-reference .copybtn{color:var(--pc-on)} #percare-mock #pc-reference label{margin:0} #percare-mock #pc-reference .wrap{max-width:650px} @media(max-width:400px){#percare-mock #pc-reference .grid2{grid-template-columns:1fr}}</style><div class="wrap"><div class="ref-card">
+  <div class="ctop"><span class="ctitle">Datum &amp; Uhrzeit</span></div>
+  <div class="cbody">
+    <div class="grid2">
+      <div class="field"><label>Datum</label><input type="date" id="datum"></div>
+      <div class="field"><label>Uhrzeit</label><input type="time" id="uhrzeit"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Kotabsatz -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Kotabsatz <span class="schwer" id="schwer">Auffällige Kombination – prüfen</span></span></div>
+  <div class="cbody">
+    <div id="kot-list"></div>
+    <div id="kot-none" class="nonehint">Noch kein Eintrag.</div>
+    <button class="addbtn" id="add-kot">+ Kotabsatz hinzufügen</button>
+  </div>
+</div>
+
+<!-- Erbrechen -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Erbrechen</span><button class="tbtn" id="btn-erb">Hinzufügen</button></div>
+  <div class="cbody" id="sec-erb" style="display:none">
+    <div class="field">
+      <div class="chips" id="erb-chips">
+        <button type="button" class="chip" id="ec-nein">Nein</button>
+        <button type="button" class="chip" id="ec-futter">Futtererbrechen</button>
+        <button type="button" class="chip" id="ec-galle">Galle/Schleim</button>
+        <button type="button" class="chip" id="ec-haar">Haarballen</button>
+        <button type="button" class="chip" id="ec-sonst">Sonstiges</button>
+      </div>
+    </div>
+    <div id="erb-extra" style="display:none">
+      <div class="field"><label>Zeiterfassung</label>
+        <div class="chips" id="erbz-chips">
+          <button type="button" class="chip sel" id="erbz-kein">Kein Zeitpunkt</button>
+          <button type="button" class="chip" id="erbz-punkt">Fester Zeitpunkt</button>
+          <button type="button" class="chip" id="erbz-spanne">Zeitspanne</button>
+        </div>
+      </div>
+      <div id="erbz-p" style="display:none" class="tsbox">
+        <div class="tslbl">Zeitpunkt</div>
+        <div class="grid2">
+          <div class="field"><label>Datum</label><input type="date" id="erb-dp"></div>
+          <div class="field"><label>Uhrzeit</label><input type="time" id="erb-tp"></div>
+        </div>
+      </div>
+      <div id="erbz-s" style="display:none" class="tsbox">
+        <div class="tslbl">Von</div>
+        <div class="grid2" style="margin-bottom:8px">
+          <div class="field"><label>Datum</label><input type="date" id="erb-dvon"></div>
+          <div class="field"><label>Uhrzeit</label><input type="time" id="erb-tvon"></div>
+        </div>
+        <div class="tslbl">Bis</div>
+        <div class="grid2">
+          <div class="field"><label>Datum</label><input type="date" id="erb-dbis"></div>
+          <div class="field"><label>Uhrzeit</label><input type="time" id="erb-tbis"></div>
+        </div>
+        <div class="midhint" id="erb-mid"></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div class="field"><label>Anzahl Episoden</label><input type="number" id="erb-anz" min="1" max="20" placeholder="z.B. 1"></div>
+        <div class="field"><label>Bezug Kotabsatz</label>
+          <select id="erb-bez"><option value="">— auswählen —</option><option value="vor-kot">Vor dem Kotabsatz</option><option value="nach-kot">Nach dem Kotabsatz</option><option value="kein-kot">Kein Kotabsatz gefolgt</option><option value="unbekannt">Nicht zuordenbar</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Bemerkung (optional)</label><textarea id="erb-bem" placeholder="z.B. Konsistenz, Farbe ..."></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- Urin -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Urinabsatz <span style="font-size:11px;color:#bbb;text-transform:none;font-weight:400">(Vortag)</span></span><button class="tbtn" id="btn-urin">Hinzufügen</button></div>
+  <div class="cbody" id="sec-urin" style="display:none">
+    <div class="grid2">
+      <div class="field"><label>Datum Vortag</label><input type="date" id="urin-d"></div>
+      <div class="field"><label>Häufigkeit</label><input type="number" id="urin-anz" min="0" max="20" placeholder="z.B. 3"></div>
+    </div>
+    <div class="field"><label>Bemerkung (optional)</label><textarea id="urin-bem" placeholder="z.B. wenig Menge ..."></textarea></div>
+  </div>
+</div>
+
+<!-- Futter -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Futteraufnahme</span><button class="tbtn" id="btn-futter">Hinzufügen</button></div>
+  <div class="cbody" id="sec-futter" style="display:none">
+    <div class="field"><label>Mahlzeit</label>
+      <div class="chips" id="mz-chips">
+        <button type="button" class="chip" id="mzc-fr" data-v="fruehstueck">Frühstück</button>
+        <button type="button" class="chip" id="mzc-mi" data-v="mittag">Mittag</button>
+        <button type="button" class="chip" id="mzc-ab" data-v="abendessen">Abendessen</button>
+      </div>
+    </div>
+    <div class="field"><label>Aufgenommene Menge</label>
+      <div class="chips" id="mg-chips">
+        <button type="button" class="chip" id="mgc-v" data-v="verweigert" data-pct="0%">Verweigert</button>
+        <button type="button" class="chip" id="mgc-w" data-v="wenig" data-pct="0-30%">Wenig</button>
+        <button type="button" class="chip" id="mgc-m" data-v="mittel" data-pct="31-70%">Mittel</button>
+        <button type="button" class="chip" id="mgc-vi" data-v="viel" data-pct="71-100%">Viel</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Marke</label><input type="text" id="fut-marke" placeholder="z.B. Sheba"></div>
+      <div class="field"><label>Sorte</label><input type="text" id="fut-sorte" placeholder="z.B. Kalb"></div>
+    </div>
+    <div class="field"><label>Bemerkung (optional)</label><textarea id="fut-bem" placeholder="z.B. nur Soße ..."></textarea></div>
+  </div>
+</div>
+
+<!-- Verhalten -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Verhalten</span><button class="tbtn" id="btn-verh">Hinzufügen</button></div>
+  <div class="cbody" id="sec-verh" style="display:none">
+<div id="pc-behavior"></div>
+<label class="pc-beh-check"><input type="checkbox" id="pc-apathy"> Apathisch / kaum ansprechbar</label>
+<p id="pc-apathy-hint" hidden role="alert">Wenn Perkele aktuell apathisch oder kaum ansprechbar ist: umgehend Tierarzt oder Notdienst kontaktieren.</p>
+<p id="pc-beh-error" role="alert"></p>
+<style>
+#percare-mock #pc-reference .pc-beh-category{padding:16px 0;border-bottom:1px solid var(--pc-line)}
+#percare-mock #pc-reference .pc-beh-checks{display:grid;gap:8px;margin:14px 0}
+#percare-mock #pc-reference .pc-beh-checks label,#percare-mock #pc-reference .pc-beh-check{display:flex;gap:10px;align-items:center;min-height:44px;color:var(--pc-ink)}
+#percare-mock #pc-reference input[type=checkbox]{width:20px;height:20px;margin:0;flex-shrink:0;appearance:auto}
+#percare-mock #pc-reference .pc-beh-field{display:block;margin:12px 0;color:var(--pc-ink)}
+#percare-mock #pc-reference .pc-beh-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#percare-mock #pc-reference .pc-beh-dates[hidden],#percare-mock #pc-reference [hidden]{display:none}
+#percare-mock #pc-reference input[type=datetime-local],#percare-mock #pc-reference input[type=file]{width:100%;min-width:0;font:inherit;padding:10px;background:var(--pc-bg);color:var(--pc-ink);border:1px solid var(--pc-line);border-radius:9px}
+#percare-mock #pc-reference .pc-beh-media{display:flex;flex-wrap:wrap;gap:10px}
+#percare-mock #pc-reference .pc-beh-media img,#percare-mock #pc-reference .pc-beh-media video{max-width:100%;max-height:180px;border-radius:8px}
+#percare-mock #pc-reference #pc-apathy-hint{padding:12px;border:2px solid var(--pc-accent);border-radius:9px}
+@media(max-width:600px){#percare-mock #pc-reference .pc-beh-dates{grid-template-columns:1fr}}
+</style>
+    <div class="field"><label>Bauchbefund</label>
+      <div class="chips" id="ba-chips">
+        <button type="button" class="chip" id="bac-un" data-v="unauffaellig">Unauffällig</button>
+        <button type="button" class="chip" id="bac-gb" data-v="geblaeht">Gebläht/hart</button>
+        <button type="button" class="chip" id="bac-np" data-v="nicht-geprueft">Nicht geprüft</button>
+      </div>
+    </div>
+    <div class="field"><label>Schmerzzeichen</label>
+      <div class="chips" id="sc-chips">
+        <button type="button" class="chip" id="scc-nein" data-v="nein">Keine</button>
+        <button type="button" class="chip" id="scc-pr" data-v="pressen">Pressen ohne Erfolg</button>
+        <button type="button" class="chip" id="scc-sch" data-v="schmerzen">Sichtbare Schmerzen</button>
+      </div>
+    </div>
+    <div class="field"><label>Notiz (optional)</label><textarea id="verh-notiz" placeholder="z.B. wackelig auf Beinen ..."></textarea></div>
+  </div>
+</div>
+
+<!-- Laxatract -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Laxatract</span><button class="tbtn" id="btn-lax">Hinzufügen</button></div>
+  <div class="cbody" id="sec-lax" style="display:none">
+    <div id="dose-list"></div>
+    <div id="lax-none" class="nonehint">Noch keine Gabe.</div>
+    <button class="addbtn" id="add-dose">+ Gabe hinzufügen</button>
+    <div class="laxinfo">D = direkt &nbsp;|&nbsp; F = über Futter &nbsp;|&nbsp; Standard: 0,8 ml</div>
+    <div class="field" style="margin-top:12px"><label>Bemerkung (optional)</label><textarea id="lax-bem" placeholder="z.B. Direktgabe verweigert ..."></textarea></div>
+  </div>
+</div>
+
+<!-- Gewicht -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Gewicht</span><button class="tbtn" id="btn-gew">Hinzufügen</button></div>
+  <div class="cbody" id="sec-gew" style="display:none">
+    <div class="field"><label>Gewicht in kg</label><input type="number" id="gewicht" min="2" max="10" step="0.05" placeholder="z.B. 4.12"></div>
+  </div>
+</div>
+
+<!-- Notizen -->
+<div class="ref-card">
+  <div class="ctop"><span class="ctitle">Notizen</span><button class="tbtn" id="btn-noti">Hinzufügen</button></div>
+  <div class="cbody" id="sec-noti" style="display:none">
+    <textarea id="notizen" style="min-height:80px" placeholder="Besonderheiten, Beobachtungen ..."></textarea>
+  </div>
+</div>
+
+<button class="submitbtn" id="submit-btn">Protokolltext zur Prüfung erstellen</button>
+<div class="outbox" id="outbox"></div>
+<button class="copybtn" id="copybtn">Kopieren</button>
+<div class="copyhint" id="copyhint">Testtext – nicht automatisch als echte Beobachtung übernommen</div>
+
+</div></div></div></section><section><h2>2 · Prüfen und lokal speichern</h2><form id="entry-form"><label for="note">Erzeugter Protokolltext</label><textarea id="note" readonly required placeholder="Zuerst oben Beobachtungen eingeben und Protokolltext erstellen."></textarea><button type="submit" id="save" disabled>Geprüften Testeintrag speichern</button></form><p id="storage">Speicher wird geöffnet …</p><p id="status" role="status" aria-live="polite"></p><ul id="entries"></ul></section>
+<section><h2>3 · Sicherung</h2><p>Die Sicherung enthält alle Testeinträge. Speichere sie in „Dateien“ und übertrage eine Kopie auf den Mac.</p><button id="backup" disabled>Sicherungsdatei erstellen</button><p id="backup-status">Noch keine Sicherung in dieser Installation erstellt.</p><label for="restore">Sicherung zur Prüfung auswählen</label><input id="restore" type="file" accept="application/json,.json" disabled><p id="restore-info" role="status"></p><button id="confirm-restore" hidden>Geprüfte Einträge zusammenführen</button><small>Vorhandene Einträge werden nicht gelöscht. Gleiche IDs mit anderem Inhalt blockieren die Übernahme.</small></section>
+<section><h2>4 · Update prüfen</h2><p id="update-status">Eine neue Programmversion darf die gespeicherten Einträge nicht verändern.</p><button id="check-update">Nach Update suchen</button><button id="apply-update" hidden>Update jetzt laden</button><small>Vor dem Update Sicherungsdatei erstellen und Testnotiz speichern. Ungespeicherter Text wird beim Neuladen verworfen.</small></section>
 <section><h2>Deine Prüfliste</h2><ol><li>Testnotiz speichern.</li><li>App schließen, erneut öffnen und Eintrag prüfen.</li><li>iPhone neu starten, Eintrag erneut prüfen.</li><li>Sicherung in „Dateien“ speichern.</li><li>Zusammen mit der nächsten Testversion ein Update prüfen.</li><li>Sicherung in einer getrennten Testinstallation wiederherstellen.</li></ol></section>
-<footer>Programm öffentlich · Einträge nur in diesem Browser / dieser Installation · kein Versand an einen Server. Safari und Home-Bildschirm können getrennte Speicher verwenden. Sicherungen enthalten unverschlüsselten Testtext.</footer>
+<footer>Programm öffentlich · Einträge nur in diesem Browser / dieser Installation · kein Versand an einen Server. Safari und Home-Bildschirm können getrennte Speicher verwenden. Fotos und Videos sind nur lokale Vorschau und werden nicht gespeichert oder gesichert. Sicherungen enthalten unverschlüsselten Testtext.</footer>
 </main></body></html>
