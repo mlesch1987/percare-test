@@ -5,7 +5,7 @@ export function readDocuments(db){return new Promise((resolve,reject)=>{const tx
 function appendText(parent,tag,text){const node=document.createElement(tag);node.textContent=text;parent.append(node);return node;}
 export async function renderCSV(){
  if(!database)return;const docs=await readDocuments(database);const active=docs.find(x=>x.id==='active');const doc=docs.find(x=>x.id===active?.sourceId);const panel=$('csv-current');panel.replaceChildren();
- if(!doc){appendText(panel,'p','Noch keine CSV lokal importiert.');return;}
+ if(!doc){appendText(panel,'p','Noch keine CSV lokal importiert.');document.dispatchEvent(new Event('percare:csv-changed'));return;}
  const parsed=parseCSV(doc.raw);
  appendText(panel,'h3','Lokal bestätigte Basis: '+doc.name);
  appendText(panel,'p',parsed.rows.length+' Tageszeilen · '+parsed.first+' bis '+parsed.last);
@@ -13,7 +13,7 @@ export async function renderCSV(){
  appendText(panel,'p','Aktueller Darmstatus wird daraus nicht automatisch abgeleitet. Testeinträge werden nicht mit der CSV zusammengeführt.');
  appendText(panel,'small','Originaltext einschließlich BOM und historischer Zusätze bleibt lokal erhalten. '+docs.filter(x=>x.id!=='active').length+' CSV-Version(en) in der vollständigen Sicherung.');
  const details=document.createElement('details');appendText(details,'summary','Letzte dokumentierte Tage ansehen');
- parsed.rows.slice(-7).reverse().forEach(row=>{const article=document.createElement('article');appendText(article,'h4',row.fields[0]+' · '+row.date);row.fields.forEach((value,i)=>{if(i>1&&value)appendText(article,'p',parsedHeader[i]+': '+value);});details.append(article);});panel.append(details);
+ parsed.rows.slice(-7).reverse().forEach(row=>{const article=document.createElement('article');appendText(article,'h4',row.fields[0]+' · '+row.date);row.fields.forEach((value,i)=>{if(i>1&&value)appendText(article,'p',parsedHeader[i]+': '+value);});details.append(article);});panel.append(details);document.dispatchEvent(new Event('percare:csv-changed'));
 }
 const parsedHeader=['Tage','Datum','Vollabsatz','Köddel / Teilabsatz','Verstopfung','Urin (Originalfeld, Datum gegebenenfalls abweichend)','Bemerkung','Gewicht','Medikamente'];
 export function setupCSV(db){
