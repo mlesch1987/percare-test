@@ -1,7 +1,7 @@
 // Version bei jeder Veröffentlichung gemeinsam mit app.js erhöhen.
-const VERSION='1.1.1';
+const VERSION='1.2.0';
 const CACHE='percare-test-shell-'+VERSION;
-const ASSETS=['./','./index.html','./style.css','./app.js','./backup.js','./capture.js','./manifest.webmanifest','./icon.svg'];
+const ASSETS=['./','./index.html','./style.css','./app.js','./backup.js','./capture.js','./csv.js','./csv-ui.js','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('percare-test-shell-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('message',event=>{if(event.data?.type==='ACTIVATE_UPDATE')self.skipWaiting();});
