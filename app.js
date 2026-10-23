@@ -1,7 +1,7 @@
 import {setupDashboard} from './dashboard.js';
 import {setupCSV,readDocuments,validateDocuments,renderCSV} from './csv-ui.js';
 import {validateBackup,mergeEntries} from './backup.js';
-const VERSION='1.3.0';
+const VERSION='1.3.1';
 const $=id=>document.getElementById(id);
 let db,pendingRestore,registration,updating=false;
 let currentSnapshot=null,formDirty=false;

@@ -372,8 +372,34 @@ function getErbZeitStr(){
   return 'Zeitspanne: '+vD+' '+vT+' bis '+bD+' '+bT+' Uhr | Mittelwert: '+m.getFullYear()+'-'+pad(m.getMonth()+1)+'-'+pad(m.getDate())+' '+pad(m.getHours())+':'+pad(m.getMinutes())+' Uhr';
 }
 
+function validateEventWindows(){
+  function field(id){return pcRoot.querySelector('#'+id)?.value||'';}
+  function check(label,ids){var error=PerCareTimeValidation.validate.apply(PerCareTimeValidation,ids.map(field));return error?label+': '+error:'';}
+  var boxes=pcRoot.querySelectorAll('#kot-list .entrybox');
+  for(var i=0;i<boxes.length;i++){
+    var n=boxes[i].id.replace('kot-','');
+    if(boxes[i].dataset.kotv==='nein')continue;
+    if(pcRoot.querySelector('#kzs-'+n)?.classList.contains('sel')){
+      var error=check('Kotereignis '+(i+1),['kdvon-'+n,'ktvon-'+n,'kdbis-'+n,'ktbis-'+n]);if(error)return error;
+    }
+  }
+  if(secOpen('erb')&&erbVGlobal&&erbVGlobal!=='nein'&&erbZeit==='spanne'){
+    var error=check('Erbrechen',['erb-dvon','erb-tvon','erb-dbis','erb-tbis']);if(error)return error;
+  }
+  return '';
+}
+
 // ── GENERATE ─────────────────────────────────────────────────────────────
 pcRoot.querySelector("#" + 'submit-btn').addEventListener('click',function(){
+  document.dispatchEvent(new Event('percare:dirty'));
+  pcRoot.querySelector('#outbox').textContent='';
+  pcRoot.querySelector('#outbox').style.display='none';
+  pcRoot.querySelector('#copybtn').style.display='none';
+  pcRoot.querySelector('#copyhint').style.display='none';
+  var eventError=validateEventWindows();
+  pcRoot.querySelector('#capture-error').textContent=eventError;
+  if(eventError){pcRoot.querySelector('#capture-error').scrollIntoView({block:'center'});return;}
+
   pcRoot.querySelector('#pc-beh-error').textContent='';
   if(secOpen('verh')){try{behaviorText();}catch(error){pcRoot.querySelector('#pc-beh-error').textContent=error.message;pcRoot.querySelector('#pc-beh-error').scrollIntoView({block:'nearest'});return;}}
   var datum=pcRoot.querySelector("#" + 'datum').value;
